@@ -25,8 +25,23 @@ def find_capitalized_words(file_path:str)->list:
     return capitalized_words
 ```
 
-The function generated an extensive roster of proper names linked with each text and author, encompassing names of individuals, geographic locations, institutions, and titles of artistic works—all of which are conventionally capitalized in the Spanish language. Subsequently, data cleaning was performed to eliminate names unrelated to human beings. Additionally, a distinction was made between individuals associated with the
-Argentine cultural sphere and other international authors frequently referenced by Shanghai members. While the latter group could prove valuable in studying the global literary canon established by these authors, they did not contribute to insights regarding social interactions within the local literary arena.
+The function generated an extensive roster of proper names linked with each text and author, encompassing names of individuals, geographic locations, institutions, and titles of artistic works—all of which are conventionally capitalized in the Spanish language. Next, the data was cleaned to eliminate names that are not related to people, using the following function that removes articles, contractions, conjunctions and prepositions from the list if they are written in capital letters, thus removing the most common words in Spanish after a period:
+
+```
+def drop_words(word_list: list, to_drop: list) -> list:
+    return [word for word in word_list if word.lower() not in to_drop]
+
+articles = ["la", "el", "las", "los"]
+contractions = ["al", "del"]
+prepositions = ["a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en", "entre", "hacia", 
+                "hasta", "mediante", "para", "por", "según", "sin", "so", "sobre", "tras", "versus", "vía"]
+conjunctions = ["y", "e", "ni", "o", "u", "que", "si", "como", "para", "porque", "pues", "puesto", "ya",
+                "aunque", "sino", "pero", "mas"]
+```
+
+The remaining capitalized words that are not proper names have been manually cleaned.
+
+Additionally, a distinction was made between individuals associated with the Argentine cultural sphere and other international authors frequently referenced by Shanghai members. While the latter group could prove valuable in studying the global literary canon established by these authors, they did not contribute to insights regarding social interactions within the local literary arena.
 
 This list played a key role in establishing the datasets for Shanghai’s network during the 1980s and 1990s. However, during the final stage of interactions (2002-2010), the dearth of periodic publications provoked the exploration of relations through local editorial catalogs, digital newspaper searches, and interviews. Due to the scarcity of information there, the data collection process was not automated and I manually introduced it into
 the dataset. Once the initial database with the list of nodes was concluded, I constructed a relational database organized as shown in the Tables termed "Gephi_Edges" as well as the table "Gephi_Nodes_App. Table 2.2.", which summarizes the list of authors analyzed with the abbreviation with which they were identified. In the "Gephi-Edges" tables “id” served as an enumeration for each relationship within the network. “source” indicated the author signing each text, while “target” represented the names of Argentinian writers extracted using the Python function. The “type” field classified relationships as either “directed” or “undirected”, where relations were considered "direct" when the direction of the edge went from one actor node to another (as in the case of textual quotations, mentions, comments on the work, or writing of prefaces) made by one author to another (A to B relation) and  "indirect" relations refer to common forms of relations in which several actors participated simultaneously (such as participation in common events or polemics). The “weight” attribute assigns a value to each relationship, where all the weights are normalized so that they sum to 1.0. Higher weights were assigned to inter-textual interactions like comments (𝐶 = 2.5) and mentions (𝑀 = 1.5), while social encounters (𝐸𝑛𝑐 = 0.3) and participation in the same issue of _Babel. Revista de Libros_ (𝐵 = 0.25) held lower significance. Finally, the “year” column encompassed the date of the relationship or, in the case of the magazine network dataset, the issue number (1-22) in which the interactions occurred. 
